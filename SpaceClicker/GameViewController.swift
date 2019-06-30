@@ -18,19 +18,21 @@ class GameViewController: UIViewController {
         // Load 'GameScene.sks' as a GKScene. This provides gameplay related content
         // including entities and graphs.
         if let scene = GKScene(fileNamed: "GameScene") {
-            
+
+
             // Get the SKScene from the loaded GKScene
             if let sceneNode = scene.rootNode as! GameScene? {
-                
+
+                sceneNode.viewController = self
+
                 // Copy gameplay related content over to the scene
-                sceneNode.entities = scene.entities
-                sceneNode.graphs = scene.graphs
                 
                 // Set the scale mode to scale to fit the window
                 sceneNode.scaleMode = .aspectFill
                 
                 // Present the scene
                 if let view = self.view as! SKView? {
+                    
                     view.presentScene(sceneNode)
                     
                     view.ignoresSiblingOrder = true
@@ -40,6 +42,14 @@ class GameViewController: UIViewController {
                 }
             }
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
     override var shouldAutorotate: Bool {
@@ -56,5 +66,11 @@ class GameViewController: UIViewController {
 
     override var prefersStatusBarHidden: Bool {
         return true
+    }
+
+    func goToMapView() {
+
+        self.performSegue(withIdentifier: "mapViewSegue", sender: self)
+
     }
 }
